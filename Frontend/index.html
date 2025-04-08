@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" class="bg-gray-900 text-white">
+<head>
+  <meta charset="UTF-8">
+  <title>Render Auto Deploy</title>
+  <script defer src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="flex items-center justify-center h-screen">
+  <div class="bg-gray-800 p-8 rounded-xl w-full max-w-xl shadow-xl">
+    <h1 class="text-2xl mb-4 font-bold text-center">🚀 Auto Deploy to Render</h1>
+    <form id="deployForm" class="space-y-4">
+      <input type="text" name="repo" placeholder="GitHub Repo URL" class="w-full p-2 rounded bg-gray-700 border border-gray-600" required />
+      <input type="text" name="apiKey" placeholder="Render API Key" class="w-full p-2 rounded bg-gray-700 border border-gray-600" required />
+      <input type="text" name="envKey1" placeholder="ENV Key 1" class="w-full p-2 rounded bg-gray-700 border border-gray-600" />
+      <input type="text" name="envValue1" placeholder="ENV Value 1" class="w-full p-2 rounded bg-gray-700 border border-gray-600" />
+      <button type="submit" class="bg-blue-600 w-full py-2 rounded hover:bg-blue-700">Deploy</button>
+    </form>
+    <div id="result" class="mt-4 text-center"></div>
+  </div>
+
+  <script>
+    document.getElementById("deployForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const repo = e.target.repo.value;
+      const apiKey = e.target.apiKey.value;
+      const envKey1 = e.target.envKey1.value;
+      const envValue1 = e.target.envValue1.value;
+
+      const res = await fetch("http://localhost:3000/deploy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          repo, apiKey, envVars: [{ key: envKey1, value: envValue1 }]
+        })
+      });
+
+      const data = await res.json();
+      document.getElementById("result").textContent = JSON.stringify(data, null, 2);
+    });
+  </script>
+</body>
+</html>
