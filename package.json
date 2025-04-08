@@ -2,7 +2,7 @@
   "name": "render-deploy-site",
   "version": "1.0.0",
   "scripts": {
-    "start": "node backend/server.js"
+    "start": "node Backend/server.js"
   },
   "dependencies": {
     "axios": "^1.4.0",
