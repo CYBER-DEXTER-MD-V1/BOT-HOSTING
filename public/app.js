@@ -25,7 +25,8 @@ document.getElementById('generate-pairing-code').addEventListener('click', funct
   fetch('/generate-pairing-code')
     .then(response => response.json())
     .then(data => {
-      alert('Your pairing code is: ' + data.pairingCode);
+      // Display the generated pairing code in the frontend
+      document.getElementById('pairing-code-display').textContent = 'Your Pairing Code: ' + data.pairingCode;
     })
     .catch(error => {
       console.error('Error:', error);
