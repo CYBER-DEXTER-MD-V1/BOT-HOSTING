@@ -1,40 +1,37 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-gray-900 text-white">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Render Deploy Tool</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WhatsApp DP Change</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body class="flex items-center justify-center h-screen">
-  <div class="bg-gray-800 p-8 rounded-xl max-w-xl w-full">
-    <h1 class="text-2xl mb-4 font-bold text-center">🚀 Deploy to Render</h1>
-    <form id="deployForm" class="space-y-4">
-      <input name="repo" type="text" placeholder="GitHub Repo URL" required class="w-full p-2 rounded bg-gray-700 border border-gray-600" />
-      <input name="envKey" type="text" placeholder="ENV Key (e.g. API_KEY)" class="w-full p-2 rounded bg-gray-700 border border-gray-600" />
-      <input name="envValue" type="text" placeholder="ENV Value" class="w-full p-2 rounded bg-gray-700 border border-gray-600" />
-      <button class="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded" type="submit">Deploy Now</button>
+<body>
+  <div class="container">
+    <h1>Change Your WhatsApp DP</h1>
+    
+    <!-- Image Upload Form -->
+    <form id="upload-form" enctype="multipart/form-data">
+      <input type="file" id="image-upload" name="image" accept="image/*">
+      <button type="submit">Upload Image</button>
     </form>
-    <div id="result" class="mt-4 text-center"></div>
+    
+    <h3>Linked Device</h3>
+    <!-- Pairing Code Form -->
+    <div>
+      <button id="generate-pairing-code">Generate Pairing Code</button>
+      <input type="text" id="pairing-code-input" placeholder="Enter Pairing Code">
+      <button id="verify-pairing-code">Verify Pairing Code</button>
+      <p id="pairing-status"></p>
+    </div>
+
+    <div id="image-preview-container">
+      <h3>Image Preview</h3>
+      <img id="image-preview" src="" alt="Image Preview" style="max-width: 300px; display:none;">
+    </div>
   </div>
 
-  <script>
-    document.getElementById("deployForm").addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const repo = e.target.repo.value;
-      const envKey = e.target.envKey.value;
-      const envValue = e.target.envValue.value;
-
-      const envVars = envKey && envValue ? [{ key: envKey, value: envValue }] : [];
-
-      const res = await fetch("http://localhost:3000/deploy", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ repo, envVars })
-      });
-
-      const data = await res.json();
-      document.getElementById("result").textContent = JSON.stringify(data, null, 2);
-    });
-  </script>
+  <script src="https://cdn.socket.io/4.0.0/socket.io.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
