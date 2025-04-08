@@ -1,13 +1,22 @@
 const express = require("express");
 const cors = require("cors");
 const axios = require("axios");
+require("dotenv").config();  // Load environment variables
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
+// POST endpoint to handle deployment requests
 app.post("/deploy", async (req, res) => {
-  const { repo, apiKey, envVars } = req.body;
+  const { repo, envVars } = req.body;
+
+  // Fetch the API key securely from environment variables
+  const apiKey = process.env.RENDER_API_KEY;
+
+  if (!apiKey) {
+    return res.status(500).json({ error: "Render API key not found!" });
+  }
 
   try {
     const response = await axios.post("https://api.render.com/v1/services", {
@@ -21,11 +30,12 @@ app.post("/deploy", async (req, res) => {
       envVars
     }, {
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`, // Use the stored API key here
         "Content-Type": "application/json"
       }
     });
 
+    // Send back the response from Render API
     res.json(response.data);
   } catch (err) {
     console.error(err?.response?.data || err.message);
@@ -33,4 +43,5 @@ app.post("/deploy", async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+// Start the server
+app.listen(3000, () => console.log("🚀 Server running at http://localhost:3000"));
